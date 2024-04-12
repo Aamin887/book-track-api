@@ -12,15 +12,21 @@ This is an express API which provides endpoints to manage book records. It allow
 
 1. Clone this repository to your local machine:
 
-> ```npm clone https://github.com/Aamin887/fav_book.git```
+```bash
+ npm clone https://github.com/Aamin887/fav_book.git
+```
 
 2. Navigate to the project directory:
 
-> `cd fav_book`
+```bash
+ cd fav_book
+```
 
 3. Install dependencies:
 
-> `npm install`
+```bash
+npm install
+```
 
 4. Set up your environment variables:
 
