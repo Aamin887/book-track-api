@@ -12,7 +12,7 @@ This is an express API which provides endpoints to manage book records. It allow
 
 1. Clone this repository to your local machine:
 
-> `npm clone https://github.com/Aamin887/fav_book.git`
+> ```npm clone https://github.com/Aamin887/fav_book.git```
 
 2. Navigate to the project directory:
 
