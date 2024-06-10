@@ -1,4 +1,8 @@
-const Books = require("../models/book.model");
+const Books =
+  process.env.NODE_ENV === "test"
+    ? require("../models/seedModel.model")
+    : require("../models/book.model");
+
 const asyncHandler = require("express-async-handler");
 
 // @Desc  Get all books
@@ -29,7 +33,7 @@ const getBook = asyncHandler(async (req, res) => {
     throw new Error("provide a book id");
   }
 
-  const book = await Books.findById(bookId.toString());
+  const book = await Books.findById(bookId);
 
   if (!book) {
     res.status(400);
@@ -46,7 +50,7 @@ const getBook = asyncHandler(async (req, res) => {
 // @method  POST /books
 // @Access  Public
 const createBooks = asyncHandler(async (req, res) => {
-  const { title, author, dateOfPublication, genre, desc } = req.body;
+  const { _id, title, author, dateOfPublication, genre, desc } = req.body;
 
   if (!title || !author) {
     res.status(400);
@@ -61,6 +65,7 @@ const createBooks = asyncHandler(async (req, res) => {
   }
 
   const newRecord = await Books.create({
+    _id,
     title,
     author,
     dateOfPublication,
@@ -112,7 +117,7 @@ const updateBooks = asyncHandler(async (req, res) => {
 const deleteBooks = asyncHandler(async (req, res) => {
   const bookId = req.params.id;
 
-  const bookRecord = await Books.findById(bookId);
+  const bookRecord = await Books.findOne({ _id: bookId });
 
   if (!bookRecord) {
     res.status(400);
@@ -124,7 +129,7 @@ const deleteBooks = asyncHandler(async (req, res) => {
   if (updatedRecord) {
     res.sendStatus(204);
   } else {
-    res.status(400);
+    res.status(405);
     throw new Error("could not delete book record");
   }
 });

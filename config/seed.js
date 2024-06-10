@@ -1,30 +1,30 @@
 const { faker } = require("@faker-js/faker");
-const Books = require("../models/book.model");
+const BooksSeedSchema = require("../models/seedModel.model");
+const seedData = require("../public/data/seedData.json");
 
 const seedDB = async () => {
-  const booksArr = [];
+  await BooksSeedSchema.deleteMany();
 
-  await Books.deleteMany();
+  // const booksArr = [];
+  // for (let i = 0; i < 10; i++) {
+  //   const title = faker.commerce.productName();
+  //   const author = faker.person.fullName();
+  //   const description = faker.commerce.productDescription();
+  //   const genre = faker.word.sample(1);
+  //   const dateOfPublication = faker.date.anytime();
 
-  for (let i = 0; i < 10; i++) {
-    const title = faker.commerce.productName();
-    const author = faker.person.fullName();
-    const description = faker.commerce.productDescription();
-    const genre = faker.word.sample(1);
-    const dateOfPublication = faker.date.anytime();
+  //   const book = {
+  //     title,
+  //     author,
+  //     description,
+  //     dateOfPublication,
+  //     genre,
+  //   };
 
-    const book = {
-      title,
-      author,
-      description,
-      dateOfPublication,
-      genre,
-    };
+  //   booksArr.push(book);
+  // }
 
-    booksArr.push(book);
-  }
-
-  await Books.insertMany([...booksArr]);
+  await BooksSeedSchema.insertMany([...seedData]);
 };
 
 module.exports = seedDB;
