@@ -3,7 +3,7 @@ const Books = require("../models/book.model");
 // retrieve all books from the database
 const getBooks = async () => {
   try {
-    const books = Books.find({});
+    const books = await Books.find({});
     return books;
   } catch (err) {
     return err;
@@ -24,7 +24,6 @@ const createBook = async (bookDetails) => {
 const updateBook = async (id, bookDetails) => {
   try {
     const findBook = await Books.findByIdAndUpdate(id, bookDetails);
-    
   } catch (error) {
     return error;
   }

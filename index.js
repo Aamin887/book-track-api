@@ -36,15 +36,16 @@ app.use("*", (req, res) => {
 
 // error middleware
 app.use(errorHandler);
-
-db()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is active on PORT: ${PORT}`);
+if (process.env.NODE_ENV !== "test") {
+  db.connect()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is active on PORT: ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+}
 
 module.exports = app;
