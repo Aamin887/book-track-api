@@ -1,86 +1,67 @@
-# fav_book Records API
+# Book Tracker API
 
-This is an express API which provides endpoints to manage book records. It allows users to perform CRUD (Create, Read, Update, Delete) operations on book records stored in a database.
+Welcome to the Book Tracker API! This API is designed to help users track books they have read. The project is built using Node.js and Express, and it is fully tested with Jest and Supertest.
 
-## Prerequisites
+## Table of Contents
 
-- Node.js installed on your machine
-- npm (Node Package Manager) installed
-- MongoDB installed and running locally or a connection to a MongoDB instance
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Getting Started
+## Features
 
-1. Clone this repository to your local machine:
+- Add new books to the already existing reading list.
+- Retrieve a list of books read.
+- Update details of books.
+- Delete books from the list.
+- Fully tested with Jest and Supertest.
 
-```bash
- npm clone https://github.com/Aamin887/fav_book.git
-```
+## Installation
 
-2. Navigate to the project directory:
+1. Clone the repository:
 
-```bash
- cd fav_book
-```
+   ```bash
+   git clone https://github.com/Aamin887/book-track-api.git
+   cd book-tracker-api
+   ```
 
-3. Install dependencies:
+2. Install dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-4. Set up your environment variables:
+3. Set up environment variables:
+   Create a `.env` file in the root of the project and add your environment variables. For example:
 
-   - Create a `.env` file in the root directory.
-   - Add the following environment variables and adjust their values according to your setup:`PORT`, `MONGO_URI`, `NODE_ENV`
-     > PORT: the port on which the port is to run
+   ```env
+   PORT = 3000
+   MONGO_URI = mongodb URI for connection
+   ```
 
-> MONGO_URI: should be the connection link for mongodb
+4. Run the application:
+   ```bash
+   npm start
+   ```
 
-> NODE_ENV: should have a value of either: development or production. This tells the app the environment its running on; if development then the error handler middleware will return the whole error stack for proper debugging, otherwise you just see a null.
+## Usage
 
-5. Start the server:
+Once the application is running, you can use tools like Postman or cURL to interact with the API.
 
-The server should now be running on `http://localhost:3501` or the PORT declared in the .env file.
+## API Endpoints
 
-## Endpoints
+### Books
 
-### 1. GET /books
+#### Get all books
 
-- Description: Retrieve all book records.
-- Response: A JSON array containing all book records.
-
-```json
-{
-  "status": "OK",
-  "books": [
-    {
-      "_id": "661663bbf34650b1ebed0c5c",
-      "title": "The mantle of the Man",
-      "author": "Amin",
-      "dateOfPublication": "2020-01-01T00:00:00.000Z",
-      "genre": "fiction",
-      "__v": 0,
-      "description": "The best book in fiction genre. 👍 "
-    },
-    {
-      "_id": "661663bbf34650b1ebed0c5c",
-      "title": "The mantle ",
-      "author": "Me",
-      "dateOfPublication": "2020-01-01T00:00:00.000Z",
-      "genre": "non-fiction",
-      "__v": 0,
-      "description": "Will change your life😊  "
-    }
-  ]
-}
-```
-
-### 2. GET /books/:id
-
-- Description: Retrieve a specific book record by its ID.
-- Parameters:
-  - `id`: The ID of the book record to retrieve.
-- Response: A JSON object representing the book record.
+- **URL:** `/api/books`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all books read by the user.
+- **Response**:
 
 ```json
 {
@@ -90,53 +71,25 @@ The server should now be running on `http://localhost:3501` or the PORT declared
     "title": "The mantle of the Man",
     "author": "Henry ",
     "dateOfPublication": "2020-01-01T00:00:00.000Z",
-    "genre": "fiction >>>",
+    "genre": "fiction",
     "__v": 0,
     "description": "Cool book"
   }
 }
 ```
 
-### 3. POST /books
+#### Get a book by ID
 
-- Description: Create a new book record.
-- Body: A JSON object containing the book details ( title, author, dateOfPublication, genre, description).
+- **URL:** `/api/books/:id`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific book by its ID.
 
-```json
-{
-  "title": "The mantle of the Man",
-  "author": "Henry ",
-  "dateOfPublication": "2020-01-01T00:00:00.000Z",
-  "genre": "fiction",
-  "description": "Cool book"
-}
-```
+#### Add a new book
 
-- Response: A JSON object representing the newly created book record.
-
-```json
-{
-  "_id": "661663bbf34650b1ebed0c5c",
-  "title": "The mantle of the Man",
-  "author": "Henry ",
-  "dateOfPublication": "2020-01-01T00:00:00.000Z",
-  "genre": "fiction",
-  "__v": 0,
-  "description": "Cool book"
-}
-```
-
-### 4. PUT /books/:id
-
-- Description:
-  - Update an existing book record.
-  - > `DELETE http://localhost:3501/${id}`
-- Parameters:
-  - `id`: The ID of the book record to update `661663bbf34650b1ebed0c5c`.
-- Body:
-
-  - A JSON object containing the updated book details. Could just include only fields to be updated. Value are optional:
-
+- **URL:** `/api/books`
+- **Method:** `POST`
+- **Description:** Add a new book to the books.
+- **Request Body:**
   ```json
   {
     "title": "The mantle of the Man",
@@ -147,37 +100,40 @@ The server should now be running on `http://localhost:3501` or the PORT declared
   }
   ```
 
-- Response: A JSON object representing the updated book record.
+#### Update a book
 
-```json
-{
-  "status": "ok",
-  "book": {
-    "_id": "661663bbf34650b1ebed0c5c",
+- **URL:** `/api/books/:id`
+- **Method:** `PUT`
+- **Description:** Update details of a specific book.
+- **Request Body:**
+  ```json
+  {
     "title": "The mantle of the Man",
-    "author": "Henry ",
+    "author": "Henry Me",
     "dateOfPublication": "2020-01-01T00:00:00.000Z",
     "genre": "fiction",
-    "__v": 0,
     "description": "Cool book"
   }
-}
+  ```
+
+#### Delete a book
+
+- **URL:** `/api/books/:id`
+- **Method:** `DELETE`
+- **Description:** Delete a book from the books list.
+
+## Testing
+
+This project uses Jest and Supertest for testing. To run the tests, use the following command:
+
+```bash
+npm run test
 ```
 
-### 5. DELETE /books/:id
-
-- Description:
-  - Delete a book record.
-  - > `DELETE http://localhost:3501/${id}`
-- Parameters:
-  - `id`: The ID of the book record to delete `661663bbf34650b1ebed0c5c`.
-- Response:
-  - return a status code of `204` indicating record was successfully removed.
-
-## Contributing
+## Contribution
 
 Contributions are welcome! Please feel free to submit pull requests or open issues if you encounter any problems or have suggestions for improvements.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
