@@ -20,7 +20,13 @@ describe("GET /books", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.books.length).toBeGreaterThan(0);
-    // expect(res.body.books[0]).toEqual(seedData[0]);
+    expect(res.body.books[0]).toHaveProperty(
+      "title",
+      "author",
+      "genre",
+      "description",
+      "dateOfPublication"
+    );
   });
 });
 
@@ -29,6 +35,14 @@ describe("GET /books/:id", () => {
     const res = await request(app).get("/books/66663e5313f73057be453736");
     expect(res.statusCode).toBe(200);
     expect(res.body.book.title).toBe("Modern Granite Towels");
+    expect(res.body.book).toHaveProperty(
+      "_id",
+      "title",
+      "author",
+      "genre",
+      "description",
+      "dateOfPublication"
+    );
   });
 });
 
@@ -43,9 +57,16 @@ describe("POST /books", () => {
       genre: faker.hacker.noun(),
       dateOfPublication: faker.date.past(),
     });
-
     expect(res.statusCode).toBe(201);
     expect(res.body.book._id).toBe("6659a0be8bde7eb1dc858a05");
+    expect(res.body.book).toHaveProperty(
+      "_id",
+      "title",
+      "author",
+      "genre",
+      "description",
+      "dateOfPublication"
+    );
   });
 });
 
@@ -56,6 +77,13 @@ describe("PUT /books/:id", () => {
       .put("/books/66663e5313f73057be453739")
       .send({ genre });
     expect(res.statusCode).toBe(200);
+    expect(res.body.updatedRecord).toHaveProperty(
+      "title",
+      "author",
+      "genre",
+      "description",
+      "dateOfPublication"
+    );
     expect(res.body.updatedRecord.genre).toBe(genre);
   });
 });
