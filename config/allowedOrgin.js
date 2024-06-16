@@ -6,6 +6,8 @@ const allowedOrigin = [
   "http://localhost:5174",
   "http://localhost:3001",
   "http://localhost:5001",
+  "https://booktrackr.vercel.app",
+  "http://192.168.1.106:5173"
 ];
 
 module.exports = allowedOrigin;
