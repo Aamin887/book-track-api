@@ -1,6 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 3501;
+
+// const upload = require("./config/upload");
+const multer = require("multer");
 const cors = require("cors");
 const db = require("./config/db");
 const root = require("./routes/root");
@@ -18,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", root);
+
+const upload = multer({ dest: "./uploads/" });
 
 app.use("/books", booksRoutes);
 

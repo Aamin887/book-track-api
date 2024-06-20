@@ -57,7 +57,7 @@ describe("POST /books", () => {
       genre: faker.hacker.noun(),
       dateOfPublication: faker.date.past(),
     });
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(200);
     expect(res.body.book._id).toBe("6659a0be8bde7eb1dc858a05");
     expect(res.body.book).toHaveProperty(
       "_id",

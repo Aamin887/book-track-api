@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const uploads = require("../config/uploads");
 const {
   getAllBooks,
   getBook,
@@ -8,7 +9,7 @@ const {
   deleteBooks,
 } = require("../controllers/books.controller");
 
-router.route("/").get(getAllBooks).post(createBooks);
+router.route("/").get(getAllBooks).post(uploads.single("file"), createBooks);
 router.route("/:id").get(getBook).put(updateBooks).delete(deleteBooks);
 
 module.exports = router;
