@@ -52,7 +52,7 @@ const getBook = asyncHandler(async (req, res) => {
 const createBooks = asyncHandler(async (req, res) => {
   const { _id, title, author, dateOfPublication, genre, desc } = req.body;
 
-  const filePath = req.file.path;
+  const filePath = req?.file?.path;
 
   console.log(filePath);
 
