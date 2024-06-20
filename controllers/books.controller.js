@@ -50,17 +50,14 @@ const getBook = asyncHandler(async (req, res) => {
 // @method  POST /books
 // @Access  Public
 const createBooks = asyncHandler(async (req, res) => {
-  const { _id, title, author, dateOfPublication, genre, desc } = req.body;
+  const { title, author, dateOfPublication, genre, desc } = req.body;
+  const _id = process.env.NODE_ENV === "test" ? req.body._id : "";
 
   const filePath = req?.file?.path;
-
-  console.log(filePath);
-
   if (!title || !author) {
     res.status(400);
     throw new Error("title, filepath and author field can't be left empty");
   }
-
   const existedBook = await Books.findOne({ title });
 
   if (existedBook) {
