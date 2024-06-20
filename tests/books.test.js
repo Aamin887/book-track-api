@@ -58,8 +58,6 @@ describe("POST /books", () => {
       dateOfPublication: faker.date.past(),
     });
 
-    console.log(res);
-
     expect(res.statusCode).toBe(201);
     expect(res.body.book._id).toBe("6659a0be8bde7eb1dc858a05");
     expect(res.body.book).toHaveProperty(

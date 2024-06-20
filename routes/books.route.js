@@ -9,7 +9,10 @@ const {
   deleteBooks,
 } = require("../controllers/books.controller");
 
-router.route("/").get(getAllBooks).post(uploads.single("file"), createBooks);
+router
+  .route("/")
+  .get(getAllBooks)
+  .post(uploads.single("coverPath"), createBooks);
 router.route("/:id").get(getBook).put(updateBooks).delete(deleteBooks);
 
 module.exports = router;
