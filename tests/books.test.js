@@ -3,7 +3,6 @@ const app = require("../index");
 const db = require("../config/db");
 const seedDB = require("../config/seed");
 const { faker } = require("@faker-js/faker");
-const seedData = require("../public/data/seedData.json");
 
 beforeEach(async () => {
   await db.connect();
@@ -55,8 +54,12 @@ describe("POST /books", () => {
       description:
         "The book to help brigde the gap between the best of yourself",
       genre: faker.hacker.noun(),
+      coverPath: "amin",
       dateOfPublication: faker.date.past(),
     });
+
+    console.log(res);
+
     expect(res.statusCode).toBe(201);
     expect(res.body.book._id).toBe("6659a0be8bde7eb1dc858a05");
     expect(res.body.book).toHaveProperty(

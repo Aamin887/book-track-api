@@ -52,9 +52,13 @@ const getBook = asyncHandler(async (req, res) => {
 const createBooks = asyncHandler(async (req, res) => {
   const { _id, title, author, dateOfPublication, genre, desc } = req.body;
 
+  const filePath = req?.file?.path;
+
+  console.log(filePath);
+
   if (!title || !author) {
     res.status(400);
-    throw new Error("title and author field can't be left empty");
+    throw new Error("title, filepath and author field can't be left empty");
   }
 
   const existedBook = await Books.findOne({ title });
@@ -70,6 +74,7 @@ const createBooks = asyncHandler(async (req, res) => {
     author,
     dateOfPublication,
     genre,
+    coverPath: filePath,
     description: desc,
   });
 
