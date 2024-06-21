@@ -3,6 +3,8 @@ const Books =
     ? require("../models/seedModel.model")
     : require("../models/book.model");
 
+const bookServices = require("../services/books.services");
+
 const asyncHandler = require("express-async-handler");
 
 // @Desc  Get all books
@@ -50,17 +52,51 @@ const getBook = asyncHandler(async (req, res) => {
 // @method  POST /books
 // @Access  Public
 const createBooks = asyncHandler(async (req, res) => {
-  const { _id, title, author, dateOfPublication, genre, desc } = req.body;
+  if (process.env.NODE_ENV === "test") {
+    const { _id, title, author, dateOfPublication, genre, desc } = req.body;
+    const filePath = req?.file?.path;
+    if (!title || !author) {
+      res.status(400);
+      throw new Error("title, filepath and author field can't be left empty");
+    }
+
+    const existedBook = await Books.findOne({ title });
+
+    if (existedBook) {
+      res.status(403);
+      throw new Error("book record alright exits");
+    }
+
+    const newRecord = await Books.create({
+      _id,
+      title,
+      author,
+      dateOfPublication,
+      genre,
+      coverPath: filePath,
+      description: desc,
+    });
+
+    if (newRecord) {
+      res.status(201).json({
+        msg: "created",
+        book: newRecord,
+      });
+    } else {
+      res.status(400);
+      throw new Error("unable to create new record");
+    }
+    return;
+  }
+
+  const { title, author, dateOfPublication, genre, desc } = req.body;
 
   const filePath = req?.file?.path;
-
-  console.log(filePath);
 
   if (!title || !author) {
     res.status(400);
     throw new Error("title, filepath and author field can't be left empty");
   }
-
   const existedBook = await Books.findOne({ title });
 
   if (existedBook) {
@@ -69,7 +105,6 @@ const createBooks = asyncHandler(async (req, res) => {
   }
 
   const newRecord = await Books.create({
-    _id,
     title,
     author,
     dateOfPublication,

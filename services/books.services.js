@@ -1,4 +1,7 @@
-const Books = require("../models/book.model");
+const Books =
+  process.env.NODE_ENV === "test"
+    ? require("../models/seedModel.model")
+    : require("../models/book.model");
 
 // retrieve all books from the database
 const getBooks = async () => {
