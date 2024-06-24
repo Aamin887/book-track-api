@@ -141,14 +141,10 @@ const updateBooks = asyncHandler(async (req, res) => {
   let body = req.body;
   const imgFile = req?.file;
 
-  console.log(imgFile);
-
+  // if image file, store to gcs, and destructure the public url into the body object to update db
   if (imgFile) {
     const coverImg = await gcsUploader(imgFile.buffer, imgFile.originalname);
-
-    // console.log(coverImg);
     body = { ...req.body, coverImg: coverImg };
-    console.log(body);
   }
 
   const bookRecord = await Books.findOne({ _id: bookId });
