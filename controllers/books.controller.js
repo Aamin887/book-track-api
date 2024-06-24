@@ -98,7 +98,7 @@ const createBooks = asyncHandler(async (req, res) => {
 
   const { title, author, dateOfPublication, genre, desc } = req.body;
 
-  const file = req?.file;
+  const imgfile = req?.file;
 
   if (!title || !author) {
     res.status(400);
@@ -111,16 +111,20 @@ const createBooks = asyncHandler(async (req, res) => {
     throw new Error("book record alright exits");
   }
 
-  const coverImg = await gcsUploader(file.buffer, file.originalname);
-
-  const newRecord = await Books.create({
+  let newBook = {
     title,
     author,
     dateOfPublication,
     genre,
-    coverImg: coverImg,
     description: desc,
-  });
+  };
+
+  if (imgfile) {
+    const coverImg = await gcsUploader(imgfile.buffer, imgfile.originalname);
+    newBook = { ...newBook, coverImg };
+  }
+
+  const newRecord = await Books.create(newBook);
 
   if (newRecord) {
     res.status(201).json({
