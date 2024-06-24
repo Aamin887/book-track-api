@@ -26,7 +26,7 @@ const booksSeedSchema = mongoose.Schema(
     genre: {
       type: String,
     },
-    coverPath: {
+    coverImg: {
       type: String,
       default: "",
     },

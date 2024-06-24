@@ -14,12 +14,43 @@ const getBooks = async () => {
 };
 
 // create a book record
-const createBook = async (bookDetails) => {
-  try {
-    const book = await Books.create(bookDetails);
-    return book;
-  } catch (error) {
-    return error;
+const createBook = async (req, res) => {
+  const { _id, title, author, dateOfPublication, genre, desc } = req.body;
+  const file = req?.file;
+
+  console.log(file);
+  if (!title || !author) {
+    res.status(400);
+    throw new Error("title, filepath and author field can't be left empty");
+  }
+
+  const coverImg = gcsUploader(file.buffer, file.originalname);
+
+  const existedBook = await Books.findOne({ title });
+
+  if (existedBook) {
+    res.status(403);
+    throw new Error("book record alright exits");
+  }
+
+  const newRecord = await Books.create({
+    _id,
+    title,
+    author,
+    dateOfPublication,
+    genre,
+    coverImg: coverImg,
+    description: desc,
+  });
+
+  if (newRecord) {
+    res.status(201).json({
+      msg: "created",
+      book: newRecord,
+    });
+  } else {
+    res.status(400);
+    throw new Error("unable to create new record");
   }
 };
 

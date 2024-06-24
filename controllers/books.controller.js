@@ -7,6 +7,8 @@ const bookServices = require("../services/books.services");
 
 const asyncHandler = require("express-async-handler");
 
+const gcsUploader = require("../utils/gcsUploader");
+
 // @Desc  Get all books
 // @method  GET /books
 // @Access  Public
@@ -53,12 +55,17 @@ const getBook = asyncHandler(async (req, res) => {
 // @Access  Public
 const createBooks = asyncHandler(async (req, res) => {
   if (process.env.NODE_ENV === "test") {
+    // bookServices.createBook(req, res);
     const { _id, title, author, dateOfPublication, genre, desc } = req.body;
-    const filePath = req?.file?.path;
+    const file = req?.file;
+
+    console.log(file);
     if (!title || !author) {
       res.status(400);
       throw new Error("title, filepath and author field can't be left empty");
     }
+
+    const coverImg = gcsUploader(file.buffer, file.originalname);
 
     const existedBook = await Books.findOne({ title });
 
@@ -73,7 +80,7 @@ const createBooks = asyncHandler(async (req, res) => {
       author,
       dateOfPublication,
       genre,
-      coverPath: filePath,
+      coverImg: coverImg,
       description: desc,
     });
 
@@ -91,7 +98,7 @@ const createBooks = asyncHandler(async (req, res) => {
 
   const { title, author, dateOfPublication, genre, desc } = req.body;
 
-  const filePath = req?.file?.path;
+  const file = req?.file;
 
   if (!title || !author) {
     res.status(400);
@@ -104,12 +111,14 @@ const createBooks = asyncHandler(async (req, res) => {
     throw new Error("book record alright exits");
   }
 
+  const coverImg = await gcsUploader(file.buffer, file.originalname);
+
   const newRecord = await Books.create({
     title,
     author,
     dateOfPublication,
     genre,
-    coverPath: filePath,
+    coverImg: coverImg,
     description: desc,
   });
 
@@ -129,7 +138,14 @@ const createBooks = asyncHandler(async (req, res) => {
 // @Access  Public
 const updateBooks = asyncHandler(async (req, res) => {
   const bookId = req.params.id;
-  const body = req.body;
+  let body = req.body;
+  const imgFile = req?.file;
+
+  // if image file, store to gcs, and destructure the public url into the body object to update db
+  if (imgFile) {
+    const coverImg = await gcsUploader(imgFile.buffer, imgFile.originalname);
+    body = { ...req.body, coverImg: coverImg };
+  }
 
   const bookRecord = await Books.findOne({ _id: bookId });
 
