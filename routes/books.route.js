@@ -10,6 +10,10 @@ const {
 } = require("../controllers/books.controller");
 
 router.route("/").get(getAllBooks).post(uploads.single("imgfile"), createBooks);
-router.route("/:id").get(getBook).put(updateBooks).delete(deleteBooks);
+router
+  .route("/:id")
+  .get(getBook)
+  .put(uploads.single("imgfile"), updateBooks)
+  .delete(deleteBooks);
 
 module.exports = router;

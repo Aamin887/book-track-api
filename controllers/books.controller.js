@@ -138,7 +138,18 @@ const createBooks = asyncHandler(async (req, res) => {
 // @Access  Public
 const updateBooks = asyncHandler(async (req, res) => {
   const bookId = req.params.id;
-  const body = req.body;
+  let body = req.body;
+  const imgFile = req?.file;
+
+  console.log(imgFile);
+
+  if (imgFile) {
+    const coverImg = await gcsUploader(imgFile.buffer, imgFile.originalname);
+
+    // console.log(coverImg);
+    body = { ...req.body, coverImg: coverImg };
+    console.log(body);
+  }
 
   const bookRecord = await Books.findOne({ _id: bookId });
 
